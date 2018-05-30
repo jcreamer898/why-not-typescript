@@ -12,7 +12,7 @@ interface IGithubUserResponse {
 }
 
 interface IGithubRepositoryResponse {
-
+  name: string;
 }
 
 fetchApi<IGithubUserResponse>("https://api.github.com/users/jcreamer898")
@@ -20,7 +20,7 @@ fetchApi<IGithubUserResponse>("https://api.github.com/users/jcreamer898")
     console.log(`${user.login} has ${user.followers} followers.`);
   });
 
-  fetchApi<IGithubRepositoryResponse>("https://api.github.com/users/jcreamer898/repositories/")
+  fetchApi<IGithubRepositoryResponse[]>("https://api.github.com/users/jcreamer898/repos")
   .then((repository) => {
-    console.log(`${repository} has ${repository} followers.`);
+    repository.map((r) => console.log(r.name));
   });
