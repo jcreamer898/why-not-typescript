@@ -1,15 +1,15 @@
 import * as React from "react";
 
-export interface IDataFetcherProps<T> {
+export interface IDataFetcherProps {
   url: string;
-  children: (data: T | null) => JSX.Element;
+  render<T>(data: T | null): JSX.Element;
 }
 
-export interface IDataFetcherState<T> {
+export interface IDataFetcherState {
   data: T | null;
 }
 
-export class DataFetcher<T> extends React.PureComponent<IDataFetcherProps<T>, IDataFetcherState<T>> {
+export class DataFetcher extends React.PureComponent<IDataFetcherProps, IDataFetcherState> {
   public state = {
     data: null,
   };

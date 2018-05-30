@@ -1,16 +1,26 @@
-import request from "request-promise-native";
+import { fetchApi } from "./fetchApi";
 
-interface IGithubUser {
+interface IGithubUserResponse {
   login: string;
   id: number;
-  avatar_url: string;
+  url: string;
+  location: string;
+  public_repos: number;
+  public_gists: number;
+  followers: number;
+  updated_at: Date;
 }
 
-request("https://api.github.com/users/jcreamer898", {
-  json: true,
-  headers: {
-    "User-Agent": "node"
-  },
-}).then((user: IGithubUser) => {
-    console.log(user.login);
+interface IGithubRepositoryResponse {
+
+}
+
+fetchApi<IGithubUserResponse>("https://api.github.com/users/jcreamer898")
+  .then((user) => {
+    console.log(`${user.login} has ${user.followers} followers.`);
+  });
+
+  fetchApi<IGithubRepositoryResponse>("https://api.github.com/users/jcreamer898/repositories/")
+  .then((repository) => {
+    console.log(`${repository} has ${repository} followers.`);
   });
