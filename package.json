@@ -1,0 +1,25 @@
+{
+  "name": "tseasy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jquery": "^3.3.1",
+    "@types/react": "^16.3.14",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "@types/request": "^2.47.0",
+    "@types/request-promise-native": "^1.0.14",
+    "react": "^16.3.2",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
+    "ts-node": "^6.0.5"
+  }
+}

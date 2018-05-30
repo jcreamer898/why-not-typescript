@@ -1,0 +1,20 @@
+#!/bin/bash -e
+
+mkdir -p $1 && cd $1
+npm init -y
+npm i typescript
+tsc --init
+
+mkdir -p src
+touch src/index.ts
+
+echo '
+function hello(str: string) {
+  return `hello ${str}`;
+}
+
+console.log(hello("world"));
+' > src/index.ts
+
+tsc
+node src
