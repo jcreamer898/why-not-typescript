@@ -1,22 +1,32 @@
+import * as dotenv from "dotenv";
 import { fetchApi } from "./fetchApi";
-import { IGithubNotification, IGithubUserResponse, IGithubRepositoryResponse } from "./interfaces";
+import {
+  IGithubNotification,
+  IGithubUserResponse,
+  IGithubRepositoryResponse
+} from "./interfaces";
 
-const [,, action] = process.argv;
+dotenv.config();
+
+const [, , action] = process.argv;
+const { GITHUB_ACCESS_TOKEN } = process.env;
 
 const fetchNotifications = async () => {
-  const events = await fetchApi<IGithubNotification[]>("https://api.github.com/notifications?access_token=0d5ef7f2fef135f37555dfcbe1c5cccf46dacff6")
-  
-  console.log('My Github Notifications...\n')
-  
-  events.map((e) => {
+  const events = await fetchApi<IGithubNotification[]>(
+    `https://api.github.com/notifications?access_token=${GITHUB_ACCESS_TOKEN}`
+  );
+
+  console.log("My Github Notifications...\n");
+
+  events.map(e => {
     console.log(e.subject.title);
     console.log(e.subject.url);
-    console.log('\n');
-  })
+    console.log("\n");
+  });
 };
 
 interface IActionList {
-  [key: string]: () => Promise<void>
+  [key: string]: () => Promise<void>;
 }
 
 (async function() {
@@ -25,12 +35,16 @@ interface IActionList {
       await fetchNotifications();
     },
     user: async () => {
-      const user = await fetchApi<IGithubUserResponse>("https://api.github.com/users/jcreamer898")
+      const user = await fetchApi<IGithubUserResponse>(
+        "https://api.github.com/users/jcreamer898"
+      );
       console.log(`${user.login} has ${user.followers} followers.`);
     },
     repos: async () => {
-      const repos = await fetchApi<IGithubRepositoryResponse[]>("https://api.github.com/users/jcreamer898/repos");
-      repos.map((r) => console.log(r.name));
+      const repos = await fetchApi<IGithubRepositoryResponse[]>(
+        "https://api.github.com/users/jcreamer898/repos"
+      );
+      repos.map(r => console.log(r.name));
     }
   };
 
@@ -41,5 +55,4 @@ interface IActionList {
   } else {
     console.log(`Invalid action: ${action}`);
   }
-
 })();
