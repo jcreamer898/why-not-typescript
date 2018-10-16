@@ -1,26 +1,45 @@
 import { fetchApi } from "./fetchApi";
+import { IGithubNotification, IGithubUserResponse, IGithubRepositoryResponse } from "./interfaces";
 
-interface IGithubUserResponse {
-  login: string;
-  id: number;
-  url: string;
-  location: string;
-  public_repos: number;
-  public_gists: number;
-  followers: number;
-  updated_at: Date;
+const [,, action] = process.argv;
+
+const fetchNotifications = async () => {
+  const events = await fetchApi<IGithubNotification[]>("https://api.github.com/notifications?access_token=0d5ef7f2fef135f37555dfcbe1c5cccf46dacff6")
+  
+  console.log('My Github Notifications...\n')
+  
+  events.map((e) => {
+    console.log(e.subject.title);
+    console.log(e.subject.url);
+    console.log('\n');
+  })
+};
+
+interface IActionList {
+  [key: string]: () => Promise<void>
 }
 
-interface IGithubRepositoryResponse {
-  name: string;
-}
+(async function() {
+  const actions: IActionList = {
+    notifications: async () => {
+      await fetchNotifications();
+    },
+    user: async () => {
+      const user = await fetchApi<IGithubUserResponse>("https://api.github.com/users/jcreamer898")
+      console.log(`${user.login} has ${user.followers} followers.`);
+    },
+    repos: async () => {
+      const repos = await fetchApi<IGithubRepositoryResponse[]>("https://api.github.com/users/jcreamer898/repos");
+      repos.map((r) => console.log(r.name));
+    }
+  };
 
-fetchApi<IGithubUserResponse>("https://api.github.com/users/jcreamer898")
-  .then((user) => {
-    console.log(`${user.login} has ${user.followers} followers.`);
-  });
+  const fn = actions[action];
 
-  fetchApi<IGithubRepositoryResponse[]>("https://api.github.com/users/jcreamer898/repos")
-  .then((repository) => {
-    repository.map((r) => console.log(r.name));
-  });
+  if (fn) {
+    await fn();
+  } else {
+    console.log(`Invalid action: ${action}`);
+  }
+
+})();
