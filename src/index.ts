@@ -3,7 +3,8 @@ import { fetchApi } from "./fetchApi";
 import {
   IGithubNotification,
   IGithubUserResponse,
-  IGithubRepositoryResponse
+  IGithubRepositoryResponse,
+  IActionList,
 } from "./interfaces";
 
 dotenv.config();
@@ -24,10 +25,6 @@ const fetchNotifications = async () => {
     console.log("\n");
   });
 };
-
-interface IActionList {
-  [key: string]: () => Promise<void>;
-}
 
 (async function() {
   const actions: IActionList = {

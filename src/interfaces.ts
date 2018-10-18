@@ -38,3 +38,7 @@ export interface IGithubNotification {
     html_url: string;
   }
 }
+
+export interface IActionList {
+  [key: string]: () => Promise<void>;
+}
